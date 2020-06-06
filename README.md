@@ -8,3 +8,5 @@ Contains:
 Main page uses ajax to update the db without reloading the page. 
 Feel free to change any of it to suit your methods, I just added 
 that to see how it would work.
+
+trying to test tho
