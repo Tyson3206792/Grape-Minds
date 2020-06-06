@@ -10,23 +10,13 @@
     <title>Grape Minds</title>
 </head>
 <body>
-<?php 
-if(isset($_POST['submit'])){//do form action
-  //$sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES ('John', 'Doe', 'john@example.com')";
-  $name = $_POST['name'];
-  $brand = $_POST['brand'];
-  $query = "INSERT INTO wines (name, brand) VALUES ('$name', '$brand')";
-  $result = $mysqli-> query($query);
-  $message = ($result) ? "Table updated" : "Error, table not updated. ".$result;
-  echo $message;
 
-}
-?>
 <fieldset>
 <h1>Grape Wines Drink Alike</h1>
 <p>I know it looks like this website is entirely devoted to ranking wine</p>
-<form action="index.php" method="post">
+<form action="/Coding/wines/Grape-Minds/ratings.php" method="post">
     <input type="text" placeholder="Name" name="name" id="name" required><label for="brand">Brand:</label>
+    <input type="hidden" name="picture" value="Picture field" readonly><!-- Leaving this here so you have a field name -->
     <select name="brand" id="brand"><?php 
       if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
         foreach($results as $result){
@@ -35,8 +25,10 @@ if(isset($_POST['submit'])){//do form action
       }   ?>
     </select>
     
-    <label for="minutes">Alc/Vol:</label>
-    <input type="number" name="volume" value="14" step="0.5">
+    <label for="strength">Alc/Vol:</label>
+    <input type="number" name="strength" value="14" step="0.5">
+
+    <input type="number" name="volume" value="750" step="250">mls
     
     <label for="type">Type:</label>
     <select name="type" id="type">
@@ -55,14 +47,11 @@ if(isset($_POST['submit'])){//do form action
       <option>Semillon</option>
       <option>Pinot Gris</option>
     </select>
-    
-    <input type="text" placeholder="Volume (mL)" name="volume" id="volume" >
-    
+        
     <input type="submit" name="submit" value="Add Wine">
     <!--<button onclick="add_wine()">Add!</button>-->
 </form>
 </fieldset>
-
 <br/><hr><br/>
 <?php 
 
