@@ -17,7 +17,7 @@
 <p>I know it looks like this website is entirely devoted to ranking wine</p>
 <form action="/Coding/wines/Grape-Minds/ratings.php" method="post">
     <input type="text" placeholder="Name" name="name" id="name" required><label for="brand">Brand:</label>
-    <input type="hidden" name="picture" value="Picture field" readonly><!-- Leaving this here so you have a field name -->
+    <input type="file" name="picture" id="picture" accept="image/*">
     <select name="brand" id="brand"><?php 
       if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
         foreach($results as $result){
