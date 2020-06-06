@@ -4,7 +4,6 @@ include 'class-wine.php';
 
 if(isset($_POST['submit'])){//do form action
   //$sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES ('John', 'Doe', 'john@example.com')";
-  $picture = "img.png";//$_POST['picture'];
   $name = ($_POST['name']) ? mysqli_real_escape_string($mysqli, $_POST['name']) : NULL;
   $brand = ($_POST['brand']) ? mysqli_real_escape_string($mysqli, $_POST['brand']) : NULL;
   $strength = ($_POST['strength']) ? $_POST['strength'] : NULL;
@@ -15,6 +14,31 @@ if(isset($_POST['submit'])){//do form action
   $result = $mysqli->query($query);
   $message = ($result) ? "Table updated" : "Error: ".$mysqli->error;
   echo $message;
+  
+
+
+  //image stuff
+ 
+  $target_dir = "images/";
+  $target_file = $target_dir . basename($_FILES["picture"]["name"]);
+  $uploadOk = 1;
+  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  // Check if image file is a actual image or fake image
+  if(isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["picture"]["tmp_name"]);
+    if($check !== false) {
+      echo "File is an image - " . $check["mime"] . ".";
+      $uploadOk = 1;
+    } else {
+      echo "File is not an image.";
+      $uploadOk = 0;
+    }
+  }
+  if (move_uploaded_file($_FILES["picture"]["tmp_name"], $target_file)) {
+    echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+  } else {
+    echo "Sorry, there was an error uploading your file.";
+  }
 }
 ?>
 <br/><a href='index.php'><button>Return home</button></a>

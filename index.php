@@ -13,7 +13,7 @@
 <?php include 'confirm_submission.php';//do form action when submitted
 ?>
 <h1>Grape Wines Drink Alike</h1>
-<form action="/Coding/wines/Grape-Minds/ratings.php" method="post">
+<form action="/Grape-Minds/ratings.php" method="post" enctype="multipart/form-data">>
   <table>
     <tr><td>
       <input type="text" placeholder="Label Description" name="name" id="name" required>
@@ -30,15 +30,15 @@
     </tr></td>
     <tr><td>
       <label for="picture">Picture:</label>
-      <input type="file" name="picture" id="picture" accept="image/*">
+      <input type="file" name="picture">
     </tr></td>  
     <tr><td>
       <label for="strength">Alc/Vol (%):</label>
       <input type="number" name="strength" value="14" step="0.5">
     </tr></td>
     <tr><td>
-      <label for="size">Size (mL):</label>
-      <input type="number" name="size" value="750" step="125">
+      <label for="volume">Size (mL):</label>
+      <input type="number" name="volume" value="750" step="125">
     </tr></td>  
     <tr><td>
       <label for="type">Type:</label>
