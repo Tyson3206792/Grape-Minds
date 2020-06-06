@@ -10,10 +10,22 @@
     <title>Grape Minds</title>
 </head>
 <body>
+<?php 
+if(isset($_POST['submit'])){//do form action
+  //$sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES ('John', 'Doe', 'john@example.com')";
+  $name = $_POST['name'];
+  $brand = $_POST['brand'];
+  $query = "INSERT INTO wines (name, brand) VALUES ('$name', '$brand')";
+  $result = $mysqli-> query($query);
+  $message = ($result) ? "Table updated" : "Error, table not updated. ".$result;
+  echo $message;
+
+}
+?>
 <fieldset>
 <h1>Grape Wines Drink Alike</h1>
 <p>I know it looks like this website is entirely devoted to ranking wine</p>
-<form action="" method="post" onsubmit="return false">
+<form action="index.php" method="post">
     <input type="text" placeholder="Name" name="name" id="name" required><label for="brand">Brand:</label>
     <select name="brand" id="brand"><?php 
       if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
@@ -46,8 +58,8 @@
     
     <input type="text" placeholder="Volume (mL)" name="volume" id="volume" >
     
-    
-    <button onclick="add_wine()">Add!</button>
+    <input type="submit" name="submit" value="Add Wine">
+    <!--<button onclick="add_wine()">Add!</button>-->
 </form>
 </fieldset>
 
