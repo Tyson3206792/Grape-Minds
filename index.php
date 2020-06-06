@@ -10,7 +10,8 @@
     <title>Grape Minds</title>
 </head>
 <body>
-
+<?php include 'confirm_submission.php';//do form action when submitted
+?>
 <fieldset>
 <h1>Grape Wines Drink Alike</h1>
 <p>I know it looks like this website is entirely devoted to ranking wine</p>
