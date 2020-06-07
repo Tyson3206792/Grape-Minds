@@ -35,7 +35,7 @@ if(isset($_POST['submit'])){//do form action
     }
   }
 
-  $extension = end(explode(".", $_FILES["picture"]["name"]));
+  $extension = end(explode(".", $_FILES["picture"]["name"]));       // \/ change below to name of image \/
   if (move_uploaded_file($_FILES["picture"]["tmp_name"], $target_dir."changeThisToFileName.".$extension)) {
     echo "The file ". basename( $_FILES["picture"]["name"]). " has been uploaded.";
   } else {
