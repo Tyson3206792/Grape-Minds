@@ -1,27 +1,31 @@
 <?php 
-    $conn = establish_connection();        // Create connection
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    
-    $sql = "INSERT INTO wines(name) VALUES('".$_POST['name']."')";
-    $conn->query($sql);
-    echo $sql;
-    $conn->close();
- 
-    function establish_connection(){
-       /* $servername = "localhost";
-        $username = "tysonjgr_main";
-        $password = "#B=_KZ!^GSfy";
-        $dbname = "tysonjgr_wines";*/
-        
-        $servername = "localhost";
-        $username = "admin";
-        $password = "";
-        $dbname = "test";
-        
-    
-        // Create connection
-        return new mysqli($servername, $username, $password, $dbname);
-    }
+require_once 'db_connect.php';
+include 'class-wine.php';
+
+//image stuff
+$data = $_POST['picture'];
+$file = 'images/'.'change_this_to_name'.'.png';
+
+// remove "data:image/png;base64,"
+$uri =  substr($data,strpos($data,",") +1);
+
+// save to file
+file_put_contents($file, base64_decode($uri));
+
+// return the filename
+echo json_encode($file);
+
+if(false){     //Change to if picture gets saved successfully
+    //$sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES ('John', 'Doe', 'john@example.com')";
+    $name = ($_POST['name']) ? mysqli_real_escape_string($mysqli, $_POST['name']) : NULL;
+    $brand = ($_POST['brand']) ? mysqli_real_escape_string($mysqli, $_POST['brand']) : NULL;
+    $strength = ($_POST['strength']) ? $_POST['strength'] : NULL;
+    $volume = ($_POST['volume']) ? $_POST['volume']  : NULL;
+    $type = ($_POST['type']) ? mysqli_real_escape_string($mysqli, $_POST['type']) : NULL;
+    $subtype = ($_POST['subtype']) ? mysqli_real_escape_string($mysqli, $_POST['subtype']) : NULL;
+    $query = "INSERT INTO wines (name, brand, strength, volume, type, subtype) VALUES ('$name', '$brand', '$strength', '$volume', '$type', '$subtype')";
+    $result = $mysqli->query($query);
+    $message = ($result) ? "Table updated" : "Error: ".$mysqli->error;
+    echo $message;
+}
+?>

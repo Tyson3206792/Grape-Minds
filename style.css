@@ -34,6 +34,11 @@ label{
 	font-size: 40px;
 }
 
+canvas{
+    width: 75%;
+	height: auto;
+	float: right;
+}
 
 .submit {
 	display: block;
