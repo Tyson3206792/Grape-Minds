@@ -34,8 +34,10 @@ if(isset($_POST['submit'])){//do form action
       $uploadOk = 0;
     }
   }
-  if (move_uploaded_file($_FILES["picture"]["tmp_name"], $target_file)) {
-    echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+
+  $extension = end(explode(".", $_FILES["picture"]["name"]));
+  if (move_uploaded_file($_FILES["picture"]["tmp_name"], $target_dir."changeThisToFileName.".$extension)) {
+    echo "The file ". basename( $_FILES["picture"]["name"]). " has been uploaded.";
   } else {
     echo "Sorry, there was an error uploading your file.";
   }
