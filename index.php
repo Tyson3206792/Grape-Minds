@@ -32,9 +32,10 @@
       <label for="original_picture">Picture:</label>
       <input type="button" value="Add Image" onclick="take_image()">
       
-      <canvas type="file" id="picture" width="720" height="500" style="border:1px solid #d3d3d3;">
-          
+      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;">
+          //sort out image size next
         <script>
+        var dataURL;
         var c = document.getElementById("picture");  //Canvas
         var ctx = c.getContext("2d");
         c.style.display="none";
@@ -50,7 +51,13 @@
             var img = new Image();
             img.src = URL.createObjectURL(e.target.files[0]);
             img.onload = function() {
-                ctx.drawImage(img, 0, 0, 720, 500);
+                console.log(img.width);
+                console.log(img.height);
+                ratio = img.height/img.width;
+                c.height = c.width*ratio;
+                console.log(ratio);
+                console.log(c.height);
+                ctx.drawImage(img, 0, 0, c.width, c.height);
                 dataURL = c.toDataURL();
                 c.style.display="";
             }
@@ -142,7 +149,7 @@ if ($results = $mysqli-> query($query)) {
 
 
 <script>
-    function add_wine(){
+    function add_wine(){    //Sends all form information to php file to save
         ajaxurl = 'add_wine.php',
         data =  {
         'name': document.getElementById("name").value,
@@ -156,6 +163,7 @@ if ($results = $mysqli-> query($query)) {
       };
         $.post(ajaxurl, data, function (response) {console.log(response)});
         document.body.appendChild(document.createTextNode("Added successfully"));
+        console.log("done");
     }
 </script>
 
