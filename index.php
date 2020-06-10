@@ -1,14 +1,19 @@
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--<script src = "scripts.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <title>Grape Minds</title>
+</head>
+
 <?php 
   require_once 'db_connect.php';
   include 'class-wine.php';
+  include 'navigation_bar.php';
 ?>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!--<script src = "scripts.js"></script>-->
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <!--<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> -->
-    <title>Grape Minds</title>
-</head>
+
 <body>
 <!--<?php include 'confirm_submission.php';?>//do form action when submitted -->
 
@@ -20,50 +25,20 @@
     </tr></td>
     <tr><td>
       <label for="brand">Brand:</label>
-      <select name="brand" id="brand"><?php 
+      <select style="width: 36%; float: none" name="brand" id="brand"><?php 
         if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
           foreach($results as $result){
             echo "<option>".$result['brand']."</option>";
           }
         }?>
       </select>
+      <input type="text" style="width: 36%" placeholder="Or enter your own" name="new_brand" id="new_brand">
     </tr></td>
     <tr><td>
       <label for="original_picture">Picture:</label>
       <input type="button" value="Add Image" onclick="take_image()">
       
-      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;">
-          //sort out image size next
-        <script>
-        var dataURL;
-        var c = document.getElementById("picture");  //Canvas
-        var ctx = c.getContext("2d");
-        c.style.display="none";
-        
-        function take_image(){  //Creates a file upload button and clicks it. that way can style our own button onstead of custom file type button
-            var input = document.createElement("input");
-            input.type = "file";
-            input.addEventListener('change', add_to_canvas);
-            input.click();
-        }
-        
-        function add_to_canvas(e){
-            var img = new Image();
-            img.src = URL.createObjectURL(e.target.files[0]);
-            img.onload = function() {
-                console.log(img.width);
-                console.log(img.height);
-                ratio = img.height/img.width;
-                c.height = c.width*ratio;
-                console.log(ratio);
-                console.log(c.height);
-                ctx.drawImage(img, 0, 0, c.width, c.height);
-                dataURL = c.toDataURL();
-                c.style.display="";
-            }
-        }
-        </script>
-      
+      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;">      
     </tr></td>  
     <tr><td>
       <label for="strength">Alc/Vol (%):</label>
@@ -149,18 +124,50 @@ if ($results = $mysqli-> query($query)) {
 
 
 <script>
+    var dataURL;
+    var c = document.getElementById("picture");  //Canvas
+    var ctx = c.getContext("2d");
+    c.style.display="none";
+    
+    function take_image(){  //Creates a file upload button and clicks it. that way can style our own button onstead of custom file type button
+        var input = document.createElement("input");
+        input.type = "file";
+        input.addEventListener('change', add_to_canvas);
+        input.click();
+    }
+    
+    function add_to_canvas(e){
+        var img = new Image();
+        img.src = URL.createObjectURL(e.target.files[0]);
+        img.onload = function() {
+            console.log(img.width);
+            console.log(img.height);
+            ratio = img.height/img.width;
+            c.height = c.width*ratio;
+            console.log(ratio);
+            console.log(c.height);
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            dataURL = c.toDataURL();
+            c.style.display="";
+        }
+    }
+
     function add_wine(){    //Sends all form information to php file to save
+        brand = document.getElementById('new_brand').value;
+        if(brand == ""){
+          brand = document.getElementById("brand").value;
+        }
         ajaxurl = 'add_wine.php',
         data =  {
-        'name': document.getElementById("name").value,
-        'brand': document.getElementById("brand").value,
-        'picture': dataURL,
-        'strength': document.getElementById("strength").value,
-        'volume': document.getElementById("volume").value,
-        'type': document.getElementById("type").value,
-        'subtype': document.getElementById("subtype").value,
-        'price': document.getElementById("price").value
-      };
+          'name': document.getElementById("name").value,
+          'brand': brand,
+          'picture': dataURL,
+          'strength': document.getElementById("strength").value,
+          'volume': document.getElementById("volume").value,
+          'type': document.getElementById("type").value,
+          'subtype': document.getElementById("subtype").value,
+          'price': document.getElementById("price").value
+        };
         $.post(ajaxurl, data, function (response) {console.log(response)});
         document.body.appendChild(document.createTextNode("Added successfully"));
         console.log("done");
