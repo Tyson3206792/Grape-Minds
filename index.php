@@ -99,10 +99,19 @@ if ($results = $mysqli-> query($query)) {
         echo "</td></tr>";
       }
     }else{
-      echo "<td>This wine is missing a rating! Add your thoughts here:</td></tr>";
+      echo "<td>This wine is missing a rating! Add your thoughts here:";
       ?>
-      <input type='submit' value='Add Rating'>
+      <form><input type='text' placeholder='Add your comments here' name='comments'>
+      <input type='number' value='5' min="1" max="10" step=".01" name='rating'>
+      <select name='ranker'>
+        <option>Both</option>
+        <option>Claire</option>
+        <option>Tyson</option>
+      </select>
+      <input type='submit' value='Add Rating'></form>
       <?php
+      echo "</td></tr>";
+     
     }    
   }
   echo "</table>";
