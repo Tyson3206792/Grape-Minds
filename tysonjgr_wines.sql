@@ -85,3 +85,4 @@ COMMIT;
 
 ALTER TABLE `rating` ADD `rating_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`rating_id`);
 ALTER TABLE `wines` ADD `subtype` TINYTEXT NOT NULL AFTER `type`;
+ALTER TABLE `wines` ADD `price` DECIMAL(5,2) NOT NULL AFTER `subtype`;

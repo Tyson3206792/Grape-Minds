@@ -15,95 +15,58 @@
 <h1>Grape Wines Drink Alike</h1>
 <form action="" method="post" onsubmit="add_wine()">
   <table>
-    <tr><td>
-      <input type="text" placeholder="Label Description" name="name" id="name" required>
-    </tr></td>
-    <tr><td>
-      <label for="brand">Brand:</label>
-      <select name="brand" id="brand"><?php 
+    <tr><th></th>
+    <th colspan='3'><input type="text" placeholder="Label Description" name="name" id="name" required></th>
+    </tr>
+    <tr><td><label for="brand">Brand:</label><br/>Add new: <input type='checkbox' style='float:right;'></td>
+    <td colspan='3'>
+      <select name="brand" id="brand" style='float:right;'><?php 
         if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
           foreach($results as $result){
             echo "<option>".$result['brand']."</option>";
           }
         }?>
-      </select>
-    </tr></td>
-    <tr><td>
-      <label for="original_picture">Picture:</label>
-      <input type="button" value="Add Image" onclick="take_image()">
-      
-      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;">
-          //sort out image size next
-        <script>
-        var dataURL;
-        var c = document.getElementById("picture");  //Canvas
-        var ctx = c.getContext("2d");
-        c.style.display="none";
-        
-        function take_image(){  //Creates a file upload button and clicks it. that way can style our own button onstead of custom file type button
-            var input = document.createElement("input");
-            input.type = "file";
-            input.addEventListener('change', add_to_canvas);
-            input.click();
-        }
-        
-        function add_to_canvas(e){
-            var img = new Image();
-            img.src = URL.createObjectURL(e.target.files[0]);
-            img.onload = function() {
-                console.log(img.width);
-                console.log(img.height);
-                ratio = img.height/img.width;
-                c.height = c.width*ratio;
-                console.log(ratio);
-                console.log(c.height);
-                ctx.drawImage(img, 0, 0, c.width, c.height);
-                dataURL = c.toDataURL();
-                c.style.display="";
-            }
-        }
-        </script>
-      
-    </tr></td>  
-    <tr><td>
-      <label for="strength">Alc/Vol (%):</label>
-      <input type="number" name="strength" id="strength" value="14" step="0.5">
-    </tr></td>
-    <tr><td>
-      <label for="volume">Size (mL):</label>
-      <input type="number" name="volume" id="volume" value="750" step="125">
-    </tr></td>  
-    <tr><td>
-      <label for="type">Type:</label>
-      <select name="type" id="type">
+      </select></td>
+    </tr>
+    <tr><td><label for="original_picture">Picture:</label></td>
+    <td colspan='3'><input type="button" value="Add Image" onclick="take_image()">
+      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;"></td>
+          <!--sort out image size next-->
+    </tr>  
+    <tr><td width='25%'><label for="strength">Alc/Vol (%):</label></td>
+    <td width='25%'><input type="number" name="strength" id="strength" value="14" step="0.5" style='max-width: 6em;'></td>
+    <td width='25%'><label for="volume">Size (mL):</label></td>
+    <td width='25%'><input type="number" name="volume" id="volume" value="750" step="125" style='max-width: 6em;'></td>
+    </tr>  
+    <tr><td><label for="type">Type:</label></td>
+    <td colspan='3'><select name="type" id="type">
         <option>White</option>
         <option>Red</option>
         <option>Rosé</option>
         <option>Other</option>
-      </select>
-    </tr></td>
-    <tr><td>
-    <!-- Haven't added this to the database yet, but thought it might be a good idea. 
-    If possible, use AJAx to find the subtypes we've already added for the preselected main category-->
-      <label for="subtype">Subtype:</label>
+      </select></td>
+    </tr>  
+    <tr><td><label for="subtype">Subtype:</label></td>
+    <td colspan='3'>
+    <!-- If possible, use AJAx to find the subtypes we've already added for the preselected main category-->
       <select name="subtype" id="subtype">
         <option>Other</option>
         <option>Cabernet</option>
         <option>Semillon</option>
         <option>Pinot Gris</option>
-      </select>
-    </tr></td>
-    <tr><td>
-      <label for="price">Price ($):</label>
+      </select></td>
+    </tr>  
+    <tr><td><label for="price">Price ($):</label></td>
+    <td colspan='3'>
       <input type="number" name="price" id="price">
-    </tr></td>
-    <tr><td><br/>
+      </td></tr> 
+    <tr><td colspan='4'><br/>
       <input type="submit" name="submit" class="submit" value="Add Wine">
-    </tr></td>
+      </td></tr>  
     
-    <tr><td><br/>
+    <tr><td colspan='4'><br/>
       <input type="button" value="Test submit without reload" onclick="add_wine()">
-    </tr></td>
+      </td></tr>  
     
     
   </table>
@@ -137,6 +100,9 @@ if ($results = $mysqli-> query($query)) {
       }
     }else{
       echo "<td>This wine is missing a rating! Add your thoughts here:</td></tr>";
+      ?>
+      <input type='submit' value='Add Rating'>
+      <?php
     }    
   }
   echo "</table>";
@@ -165,6 +131,35 @@ if ($results = $mysqli-> query($query)) {
         document.body.appendChild(document.createTextNode("Added successfully"));
         console.log("done");
     }
+  
+var dataURL;
+    var c = document.getElementById("picture");  //Canvas
+    var ctx = c.getContext("2d");
+    c.style.display="none";
+    
+    function take_image(){  //Creates a file upload button and clicks it. that way can style our own button onstead of custom file type button
+        var input = document.createElement("input");
+        input.type = "file";
+        input.addEventListener('change', add_to_canvas);
+        input.click();
+    }
+    
+    function add_to_canvas(e){
+        var img = new Image();
+        img.src = URL.createObjectURL(e.target.files[0]);
+        img.onload = function() {
+            console.log(img.width);
+            console.log(img.height);
+            ratio = img.height/img.width;
+            c.height = c.width*ratio;
+            console.log(ratio);
+            console.log(c.height);
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            dataURL = c.toDataURL();
+            c.style.display="";
+        }
+    }
+
 </script>
 
 </body>

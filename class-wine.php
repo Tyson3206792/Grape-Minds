@@ -74,6 +74,6 @@ class Wine{
     }
     
     function ratings_count(){
-        return count($this->ratings);
+        return count($this->get_ratings());
     }
 }
