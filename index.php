@@ -15,10 +15,10 @@
 ?>
 
 <body>
-<!--<?php include 'confirm_submission.php';?>//do form action when submitted -->
-
+<div id='message'></div>
 <h1>Grape Wines Drink Alike</h1>
-<form action="" method="post" onsubmit="add_wine()">
+
+<form method="post" onsubmit="add_wine()">
   <table>
     <tr><td>
       <input type="text" placeholder="Label Description" name="name" id="name" required>
@@ -42,11 +42,11 @@
     </tr></td>  
     <tr><td>
       <label for="strength">Alc/Vol (%):</label>
-      <input type="number" name="strength" id="strength" value="14" step="0.5">
+      <input type="number" name="strength" id="strength" value="14" step="0.5" required>
     </tr></td>
     <tr><td>
       <label for="volume">Size (mL):</label>
-      <input type="number" name="volume" id="volume" value="750" step="125">
+      <input type="number" name="volume" id="volume" value="750" step="125" required>
     </tr></td>  
     <tr><td>
       <label for="type">Type:</label>
@@ -58,26 +58,23 @@
       </select>
     </tr></td>
     <tr><td>
-    <!-- Haven't added this to the database yet, but thought it might be a good idea. 
-    If possible, use AJAx to find the subtypes we've already added for the preselected main category-->
-      <label for="subtype">Subtype:</label>
-      <select name="subtype" id="subtype">
-        <option>Other</option>
-        <option>Cabernet</option>
-        <option>Semillon</option>
-        <option>Pinot Gris</option>
+    <tr><td>
+      <label for="brand">Subtype:</label>
+      <select style="width: 36%; float: none" name="subtype" id="subtype"><?php 
+        if ($results = $mysqli-> query("SELECT DISTINCT subtype FROM wines")) {
+          foreach($results as $result){
+            echo "<option>".$result['subtype']."</option>";
+          }
+        }?>
       </select>
+      <input type="text" style="width: 36%" placeholder="Or enter your own" name="new_subtype" id="new_subtype">
     </tr></td>
     <tr><td>
       <label for="price">Price ($):</label>
-      <input type="number" name="price" id="price">
+      <input type="number" name="price" id="price" required>
     </tr></td>
     <tr><td><br/>
-      <input type="submit" name="submit" class="submit" value="Add Wine">
-    </tr></td>
-    
-    <tr><td><br/>
-      <input type="button" value="Test submit without reload" onclick="add_wine()">
+      <input type="button" class="submit" value="Add Wine" onclick="add_wine()">
     </tr></td>
     
     
@@ -119,10 +116,6 @@ if ($results = $mysqli-> query($query)) {
 
 ?>
 
-
-
-
-
 <script>
     var dataURL;
     var c = document.getElementById("picture");  //Canvas
@@ -153,9 +146,14 @@ if ($results = $mysqli-> query($query)) {
     }
 
     function add_wine(){    //Sends all form information to php file to save
+      //add form fill checks before calling php page
         brand = document.getElementById('new_brand').value;
         if(brand == ""){
           brand = document.getElementById("brand").value;
+        }
+        subtype = document.getElementById('new_subtype').value;
+        if(subtype == ""){
+          subtype = document.getElementById("subtype").value;
         }
         ajaxurl = 'add_wine.php',
         data =  {
@@ -165,12 +163,17 @@ if ($results = $mysqli-> query($query)) {
           'strength': document.getElementById("strength").value,
           'volume': document.getElementById("volume").value,
           'type': document.getElementById("type").value,
-          'subtype': document.getElementById("subtype").value,
+          'subtype': subtype,
           'price': document.getElementById("price").value
         };
-        $.post(ajaxurl, data, function (response) {console.log(response)});
-        document.body.appendChild(document.createTextNode("Added successfully"));
-        console.log("done");
+        $.post(ajaxurl, data, function (response) {
+            console.log(response);
+            console.log("done");
+            span = document.createElement('span');
+            span.innerHTML = "Wine Saved";
+            document.getElementById('message').appendChild(span);
+            window.scrollTo(0, 0);
+        });
     }
 </script>
 

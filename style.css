@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body{
 	background-color: #fff;
 }
@@ -9,6 +13,18 @@ input {
 	font-size: 40px;
 	border-radius: 20px;
 	float: right;
+}
+
+span{
+	padding-top: 2px;
+    padding-bottom: 2px;
+    right: 5px;
+	background-color: #64b450;
+    color: #fff;
+    position: absolute;
+    font-size: 32px;
+    padding: 4px 12px 4px 6px;
+    border-radius: 10px;
 }
 
 label {

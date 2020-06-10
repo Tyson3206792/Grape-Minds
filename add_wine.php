@@ -26,7 +26,8 @@ if (file_exists($file)) {   //Change to if picture gets saved successfully
     $volume = ($_POST['volume']) ? $_POST['volume']  : NULL;
     $type = ($_POST['type']) ? mysqli_real_escape_string($mysqli, $_POST['type']) : NULL;
     $subtype = ($_POST['subtype']) ? mysqli_real_escape_string($mysqli, $_POST['subtype']) : NULL;
-    $query = "INSERT INTO wines (wine_id, name, brand, strength, volume, type, subtype) VALUES (".$wine_id.", '$name', '$brand', '$strength', '$volume', '$type', '$subtype')";
+    $price = ($_POST['price']) ? mysqli_real_escape_string($mysqli, $_POST['price']) : NULL;
+    $query = "INSERT INTO wines (wine_id, name, brand, strength, volume, type, subtype, price) VALUES ('$wine_id', '$name', '$brand', '$strength', '$volume', '$type', '$subtype', '$price')";
     $result = $mysqli->query($query);
     $message = ($result) ? "Table updated" : "Error: ".$mysqli->error;
     echo $message;
