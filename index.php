@@ -5,54 +5,109 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!--<script src = "scripts.js"></script>-->
-    <!--<link rel="stylesheet" type="text/css" href="style.css">-->
+    <link rel="stylesheet" type="text/css" href="style.css">
     <!--<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> -->
     <title>Grape Minds</title>
 </head>
 <body>
-<?php include 'confirm_submission.php';//do form action when submitted
-?>
-<fieldset>
-<h1>Grape Wines Drink Alike</h1>
-<p>I know it looks like this website is entirely devoted to ranking wine</p>
-<form action="" method="post">
-    <input type="text" placeholder="Name" name="name" id="name" required><label for="brand">Brand:</label>
-    <input type="hidden" name="picture" value="Picture field" readonly><!-- Leaving this here so you have a field name -->
-    <select name="brand" id="brand"><?php 
-      if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
-        foreach($results as $result){
-          echo "<option>".$result['brand']."</option>";
-        }
-      }   ?>
-    </select>
-    
-    <label for="strength">Alc/Vol:</label>
-    <input type="number" name="strength" value="14" step="0.5">
+<!--<?php include 'confirm_submission.php';?>//do form action when submitted -->
 
-    <input type="number" name="volume" value="750" step="250">mls
-    
-    <label for="type">Type:</label>
-    <select name="type" id="type">
-      <option>White</option>
-      <option>Red</option>
-      <option>Rosé</option>
-      <option>Other</option>
-    </select>
-    
+<h1>Grape Wines Drink Alike</h1>
+<form action="" method="post" onsubmit="add_wine()">
+  <table>
+    <tr><td>
+      <input type="text" placeholder="Label Description" name="name" id="name" required>
+    </tr></td>
+    <tr><td>
+      <label for="brand">Brand:</label>
+      <select name="brand" id="brand"><?php 
+        if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
+          foreach($results as $result){
+            echo "<option>".$result['brand']."</option>";
+          }
+        }?>
+      </select>
+    </tr></td>
+    <tr><td>
+      <label for="original_picture">Picture:</label>
+      <input type="button" value="Add Image" onclick="take_image()">
+      
+      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;">
+          //sort out image size next
+        <script>
+        var dataURL;
+        var c = document.getElementById("picture");  //Canvas
+        var ctx = c.getContext("2d");
+        c.style.display="none";
+        
+        function take_image(){  //Creates a file upload button and clicks it. that way can style our own button onstead of custom file type button
+            var input = document.createElement("input");
+            input.type = "file";
+            input.addEventListener('change', add_to_canvas);
+            input.click();
+        }
+        
+        function add_to_canvas(e){
+            var img = new Image();
+            img.src = URL.createObjectURL(e.target.files[0]);
+            img.onload = function() {
+                console.log(img.width);
+                console.log(img.height);
+                ratio = img.height/img.width;
+                c.height = c.width*ratio;
+                console.log(ratio);
+                console.log(c.height);
+                ctx.drawImage(img, 0, 0, c.width, c.height);
+                dataURL = c.toDataURL();
+                c.style.display="";
+            }
+        }
+        </script>
+      
+    </tr></td>  
+    <tr><td>
+      <label for="strength">Alc/Vol (%):</label>
+      <input type="number" name="strength" id="strength" value="14" step="0.5">
+    </tr></td>
+    <tr><td>
+      <label for="volume">Size (mL):</label>
+      <input type="number" name="volume" id="volume" value="750" step="125">
+    </tr></td>  
+    <tr><td>
+      <label for="type">Type:</label>
+      <select name="type" id="type">
+        <option>White</option>
+        <option>Red</option>
+        <option>Rosé</option>
+        <option>Other</option>
+      </select>
+    </tr></td>
+    <tr><td>
     <!-- Haven't added this to the database yet, but thought it might be a good idea. 
     If possible, use AJAx to find the subtypes we've already added for the preselected main category-->
-    <label for="type">Subtype:</label>
-    <select name="subtype" id="subtype">
-      <option>Other</option>
-      <option>Cabernet</option>
-      <option>Semillon</option>
-      <option>Pinot Gris</option>
-    </select>
-        
-    <input type="submit" name="submit" value="Add Wine">
-    <!--<button onclick="add_wine()">Add!</button>-->
+      <label for="subtype">Subtype:</label>
+      <select name="subtype" id="subtype">
+        <option>Other</option>
+        <option>Cabernet</option>
+        <option>Semillon</option>
+        <option>Pinot Gris</option>
+      </select>
+    </tr></td>
+    <tr><td>
+      <label for="price">Price ($):</label>
+      <input type="number" name="price" id="price">
+    </tr></td>
+    <tr><td><br/>
+      <input type="submit" name="submit" class="submit" value="Add Wine">
+    </tr></td>
+    
+    <tr><td><br/>
+      <input type="button" value="Test submit without reload" onclick="add_wine()">
+    </tr></td>
+    
+    
+  </table>
 </form>
-</fieldset>
 <br/><hr><br/>
 <?php 
 
@@ -94,13 +149,21 @@ if ($results = $mysqli-> query($query)) {
 
 
 <script>
-    function add_wine(){
+    function add_wine(){    //Sends all form information to php file to save
         ajaxurl = 'add_wine.php',
         data =  {
-    		'name': document.getElementById("name").value
-    	};
+        'name': document.getElementById("name").value,
+        'brand': document.getElementById("brand").value,
+        'picture': dataURL,
+        'strength': document.getElementById("strength").value,
+        'volume': document.getElementById("volume").value,
+        'type': document.getElementById("type").value,
+        'subtype': document.getElementById("subtype").value,
+        'price': document.getElementById("price").value
+      };
         $.post(ajaxurl, data, function (response) {console.log(response)});
         document.body.appendChild(document.createTextNode("Added successfully"));
+        console.log("done");
     }
 </script>
 
