@@ -27,6 +27,19 @@ span{
     border-radius: 10px;
 }
 
+#err{
+	padding-top: 2px;
+    padding-bottom: 2px;
+    right: auto;
+	background-color: #F00;
+    display: block;
+    font-size: 32px;
+    padding: 4px 12px 4px 6px;
+    border-radius: 10px;
+    text-align: center;
+    position: inherit;
+}
+
 label {
 	font-family: 'Enriqueta', arial, serif; 
 	line-height: 1.25; 
