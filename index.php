@@ -74,6 +74,7 @@
       <input type="number" name="price" id="price" required>
     </tr></td>
     <tr><td><br/>
+      <div id='error_message'></div>
       <input type="button" class="submit" value="Add Wine" onclick="add_wine()">
     </tr></td>
     
@@ -117,7 +118,7 @@ if ($results = $mysqli-> query($query)) {
 ?>
 
 <script>
-    var dataURL;
+    var dataURL = "";
     var c = document.getElementById("picture");  //Canvas
     var ctx = c.getContext("2d");
     c.style.display="none";
@@ -155,25 +156,47 @@ if ($results = $mysqli-> query($query)) {
         if(subtype == ""){
           subtype = document.getElementById("subtype").value;
         }
-        ajaxurl = 'add_wine.php',
-        data =  {
-          'name': document.getElementById("name").value,
-          'brand': brand,
-          'picture': dataURL,
-          'strength': document.getElementById("strength").value,
-          'volume': document.getElementById("volume").value,
-          'type': document.getElementById("type").value,
-          'subtype': subtype,
-          'price': document.getElementById("price").value
-        };
-        $.post(ajaxurl, data, function (response) {
-            console.log(response);
-            console.log("done");
-            span = document.createElement('span');
-            span.innerHTML = "Wine Saved";
-            document.getElementById('message').appendChild(span);
-            window.scrollTo(0, 0);
-        });
+        if(validate()){
+          span = document.createElement('span');
+          span.innerHTML = "Saving";
+          document.getElementById('message').appendChild(span);
+          window.scrollTo(0, 0);
+          ajaxurl = 'add_wine.php',
+          data =  {
+            'name': document.getElementById("name").value,
+            'brand': brand,
+            'picture': dataURL,
+            'strength': document.getElementById("strength").value,
+            'volume': document.getElementById("volume").value,
+            'type': document.getElementById("type").value,
+            'subtype': subtype,
+            'price': document.getElementById("price").value
+          };
+          $.post(ajaxurl, data, function (response) {
+              console.log(response);
+              console.log("done");
+              span.innerHTML = "Wine Saved";
+          });
+        }
+    }
+
+    function validate(){
+      err = document.getElementById("err");
+      if(err != null){
+        err.remove();
+      }
+      if(!document.getElementById("name").value == ""){
+        if(!dataURL == ""){
+          if(!document.getElementById("price").value == ""){            
+            return true;
+          }
+        }
+      }      
+      error_message = document.createElement('span');
+      error_message.innerHTML = "Please fill out remaining fields";
+      error_message.setAttribute('id', 'err');
+      document.getElementById('error_message').appendChild(error_message);
+      return false;
     }
 </script>
 
