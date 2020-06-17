@@ -84,32 +84,23 @@
 <br/><hr><br/>
 <?php 
 
-echo "<h2>The Goodest Wines</h2>";
+echo "<h2>Unrated Wines</h2>";
 $query = "SELECT wine_id FROM wines";
 if ($results = $mysqli-> query($query)) {
   echo "<table>";
   $name = NULL;
   foreach($results as $result){
     $wine = new Wine($result['wine_id']);
-    if($wine->get_wine_info() != NULL){
+    /*$ratings = $wine->get_ratings();
+    var_dump($ratings);*/
+    if($wine->ratings_complete() != NULL){//don't show on home page
+    }else{//Add ratings form
       $wine_info = $wine->get_wine_info();
-      echo "<tr><th colspan='2'>".$wine_info['wine_id'].": ".$wine_info['brand']."</th></tr><tr>";
+      echo "<tr><th colspan='2'>What did you think of the ".$wine_info['brand']." ".$wine_info['name']."?</th></tr><tr>";
       $rowspan = ($wine->ratings_count() >= 1) ? $wine->ratings_count() : 1;
-      echo "<td rowspan='".$rowspan."'><img src='img.png'></td>";//format 300x300
-    }
-    if($wine->get_ratings() != NULL){
-      $ratings = $wine->get_ratings();
-      $i = 0;
-      foreach($ratings as $rating){
-        if($i>=1){echo "<tr>";}//start new row
-        echo "<td>".$rating['ranker']." gave this wine ".$rating['rating']."/10.";
-        if(isset($rating['comments'])){
-          echo "<br/><i>'".$rating['comments']."'</i>";
-        }
-        echo "</td></tr>";
-      }
-    }else{
-      echo "<td>This wine is missing a rating! Add your thoughts here:</td></tr>";
+      echo "<td rowspan='".$rowspan."'><img src='".$wine->image()."'></td><td>";//format 300x300
+      $wine->add_rating();
+      echo "</td></tr>";
     }    
   }
   echo "</table>";

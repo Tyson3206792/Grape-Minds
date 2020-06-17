@@ -67,6 +67,7 @@ class Wine{
 
     function image(){//returns default img if none stored in database
         $image = ($this->wine_info['picture'] != NULL) ? $this->wine_info['picture'] : 'img.png';
+        $image = "images/".$image;
         return $image;
     }
 
@@ -77,5 +78,30 @@ class Wine{
     
     function ratings_count(){
         return count($this->get_ratings());
+    }
+
+    function ratings_complete(){
+        $count = $this->ratings_count();
+        if($count >= 2){
+            return true;
+        }elseif($count == 1){
+            $rating = $this->get_ratings();
+            return ($rating['ranker'] == 'both') ? true : false;
+        }
+       return false;
+    }
+
+    function add_rating(){
+        ?><form action="display_all.php" method="post">
+        <label for="ranker">Rater: </label><select name="ranker" id="ranker">
+            <option value="both">Both</option>
+            <option value="Claire">Claire</option>
+            <option value="Tyson">Tyson</option>
+        </select>
+        <label for="rating">Rating/10: </label><input type="number" name="rating" id="rating" min='0' max='10' step='0.25'>
+        <label for="comments">Comments: </label><input type="text" name="comments" id="comments">
+        <input type="hidden" name="wine_id" id="wine_id" value="<?php echo $this->wine_id; ?>">
+        <input type="submit">
+        </form><?php
     }
 }

@@ -14,6 +14,30 @@ require_once 'db_connect.php';
 include 'class-wine.php';
 include 'navigation_bar.php';
 
+if(isset($_POST['wine_id'])){
+    $ranker = ($_POST['ranker']) ? mysqli_real_escape_string($mysqli, $_POST['ranker']) : NULL;
+    $comments = ($_POST['comments']) ? mysqli_real_escape_string($mysqli, $_POST['comments']) : NULL;
+    $rating = ($_POST['rating']) ? $_POST['rating'] : NULL;
+    $wine_id = ($_POST['wine_id']) ? $_POST['wine_id']  : NULL;
+    $query = "INSERT INTO rating (wine_id, comments, ranker, rating) VALUES ('$wine_id', '$comments', '$ranker', '$rating')";
+    $result = $mysqli->query($query);
+    $message = ($result) ? "Table updated" : "Error: ".$mysqli->error;
+    echo $message;
+}
+
+if(isset($_POST['wine_id']) || isset($_GET['wine_id'])){//display information for a specific wine
+  $wine_id = (isset($_POST['wine_id'])) ? $_POST['wine_id'] : $_GET['wine_id'];
+  $wine = new Wine($wine_id);
+  if($wine){
+    $wine_info = $wine->get_wine_info();
+    echo "Viewing wine: ".$wine_info['name'];
+    $wine->add_rating();
+  }
+  
+}
+
+
+
 echo "<h2>Display all wines</h2>";
 $query = "SELECT wine_id FROM wines";
 if ($results = $mysqli-> query($query)) {
