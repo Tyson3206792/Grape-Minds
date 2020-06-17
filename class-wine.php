@@ -86,6 +86,7 @@ class Wine{
             return true;
         }elseif($count == 1){
             $rating = $this->get_ratings();
+            $rating = $rating[0];
             return ($rating['ranker'] == 'both') ? true : false;
         }
        return false;
