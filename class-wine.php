@@ -15,7 +15,7 @@ class Wine{
         *
         */
         require_once 'db_connect.php';//require_once instead of include so it will only add if not already included
-        $mysqli = establish_connection();
+        $mysqli = establish_connection();       
         $query = "SELECT * FROM wines WHERE wine_id = '$wine_id'";
         /**
          * Currently having issues with getting the ratings information. LEFT JOIN stops the query working
@@ -32,6 +32,8 @@ class Wine{
                     'strength' => $row[4],
                     'volume' => $row[5],
                     'type' => $row[6],
+                    'subtype' => $row[7],
+                    'price' => $row[8],
                 );
                 /*if(isset($row[7])){//if ratings found
                     $this->ratings[] = array(
@@ -47,12 +49,12 @@ class Wine{
         $query = "SELECT * FROM rating WHERE wine_id = '$wine_id'";
         if ($result = $mysqli->query($query)) {
             while ($row = $result->fetch_row()) {
-                $this->ratings[] = array(
+                $this->ratings[] = array( //Did this need []?
                     'rating_id' => $row[0],
                     'wine_id' => $row[1],
                     'comments' => $row[2],
                     'ranker' => $row[3],
-                    'rating' => $row[4],
+                    'rating' => $row[4]
                 );
             }
         }else{

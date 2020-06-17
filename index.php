@@ -1,72 +1,82 @@
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--<script src = "scripts.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <title>Grape Minds</title>
+</head>
+
 <?php 
   require_once 'db_connect.php';
   include 'class-wine.php';
+  include 'navigation_bar.php';
 ?>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!--<script src = "scripts.js"></script>-->
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <!--<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> -->
-    <title>Grape Minds</title>
-</head>
-<body>
-<!--<?php include 'confirm_submission.php';?>//do form action when submitted -->
 
+<body>
+<div id='message'></div>
 <h1>Grape Wines Drink Alike</h1>
-<form action="" method="post" onsubmit="add_wine()">
+
+<form method="post" onsubmit="add_wine()">
   <table>
-    <tr><th></th>
-    <th colspan='3'><input type="text" placeholder="Label Description" name="name" id="name" required></th>
-    </tr>
-    <tr><td><label for="brand">Brand:</label><br/>Add new: <input type='checkbox' style='float:right;'></td>
-    <td colspan='3'>
-      <select name="brand" id="brand" style='float:right;'><?php 
+    <tr><td>
+      <input type="text" placeholder="Label Description" name="name" id="name" required>
+    </tr></td>
+    <tr><td>
+      <label for="brand">Brand:</label>
+      <select style="width: 36%; float: none" name="brand" id="brand"><?php 
         if ($results = $mysqli-> query("SELECT DISTINCT brand FROM wines")) {
           foreach($results as $result){
             echo "<option>".$result['brand']."</option>";
           }
         }?>
-      </select></td>
-    </tr>
-    <tr><td><label for="original_picture">Picture:</label></td>
-    <td colspan='3'><input type="button" value="Add Image" onclick="take_image()">
-      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;"></td>
-          <!--sort out image size next-->
-    </tr>  
-    <tr><td width='25%'><label for="strength">Alc/Vol (%):</label></td>
-    <td width='25%'><input type="number" name="strength" id="strength" value="14" step="0.5" style='max-width: 6em;'></td>
-    <td width='25%'><label for="volume">Size (mL):</label></td>
-    <td width='25%'><input type="number" name="volume" id="volume" value="750" step="125" style='max-width: 6em;'></td>
-    </tr>  
-    <tr><td><label for="type">Type:</label></td>
-    <td colspan='3'><select name="type" id="type">
+      </select>
+      <input type="text" style="width: 36%" placeholder="Or enter your own" name="new_brand" id="new_brand">
+    </tr></td>
+    <tr><td>
+      <label for="original_picture">Picture:</label>
+      <input type="button" value="Add Image" onclick="take_image()">
+      
+      <canvas type="file" id="picture" width="720" height="200" style="border:1px solid #d3d3d3;">      
+    </tr></td>  
+    <tr><td>
+      <label for="strength">Alc/Vol (%):</label>
+      <input type="number" name="strength" id="strength" value="14" step="0.5" required>
+    </tr></td>
+    <tr><td>
+      <label for="volume">Size (mL):</label>
+      <input type="number" name="volume" id="volume" value="750" step="125" required>
+    </tr></td>  
+    <tr><td>
+      <label for="type">Type:</label>
+      <select name="type" id="type">
         <option>White</option>
         <option>Red</option>
         <option>Rosé</option>
         <option>Other</option>
-      </select></td>
-    </tr>  
-    <tr><td><label for="subtype">Subtype:</label></td>
-    <td colspan='3'>
-    <!-- If possible, use AJAx to find the subtypes we've already added for the preselected main category-->
-      <select name="subtype" id="subtype">
-        <option>Other</option>
-        <option>Cabernet</option>
-        <option>Semillon</option>
-        <option>Pinot Gris</option>
-      </select></td>
-    </tr>  
-    <tr><td><label for="price">Price ($):</label></td>
-    <td colspan='3'>
-      <input type="number" name="price" id="price">
-      </td></tr> 
-    <tr><td colspan='4'><br/>
-      <input type="submit" name="submit" class="submit" value="Add Wine">
-      </td></tr>  
-    
-    <tr><td colspan='4'><br/>
-      <input type="button" value="Test submit without reload" onclick="add_wine()">
-      </td></tr>  
+      </select>
+    </tr></td>
+    <tr><td>
+    <tr><td>
+      <label for="brand">Subtype:</label>
+      <select style="width: 36%; float: none" name="subtype" id="subtype"><?php 
+        if ($results = $mysqli-> query("SELECT DISTINCT subtype FROM wines")) {
+          foreach($results as $result){
+            echo "<option>".$result['subtype']."</option>";
+          }
+        }?>
+      </select>
+      <input type="text" style="width: 36%" placeholder="Or enter your own" name="new_subtype" id="new_subtype">
+    </tr></td>
+    <tr><td>
+      <label for="price">Price ($):</label>
+      <input type="number" name="price" id="price" required>
+    </tr></td>
+    <tr><td><br/>
+      <div id='error_message'></div>
+      <input type="button" class="submit" value="Add Wine" onclick="add_wine()">
+    </tr></td>
     
     
   </table>
@@ -99,19 +109,7 @@ if ($results = $mysqli-> query($query)) {
         echo "</td></tr>";
       }
     }else{
-      echo "<td>This wine is missing a rating! Add your thoughts here:";
-      ?>
-      <form><input type='text' placeholder='Add your comments here' name='comments'>
-      <input type='number' value='5' min="1" max="10" step=".01" name='rating'>
-      <select name='ranker'>
-        <option>Both</option>
-        <option>Claire</option>
-        <option>Tyson</option>
-      </select>
-      <input type='submit' value='Add Rating'></form>
-      <?php
-      echo "</td></tr>";
-     
+      echo "<td>This wine is missing a rating! Add your thoughts here:</td></tr>";
     }    
   }
   echo "</table>";
@@ -119,29 +117,8 @@ if ($results = $mysqli-> query($query)) {
 
 ?>
 
-
-
-
-
 <script>
-    function add_wine(){    //Sends all form information to php file to save
-        ajaxurl = 'add_wine.php',
-        data =  {
-        'name': document.getElementById("name").value,
-        'brand': document.getElementById("brand").value,
-        'picture': dataURL,
-        'strength': document.getElementById("strength").value,
-        'volume': document.getElementById("volume").value,
-        'type': document.getElementById("type").value,
-        'subtype': document.getElementById("subtype").value,
-        'price': document.getElementById("price").value
-      };
-        $.post(ajaxurl, data, function (response) {console.log(response)});
-        document.body.appendChild(document.createTextNode("Added successfully"));
-        console.log("done");
-    }
-  
-var dataURL;
+    var dataURL = "";
     var c = document.getElementById("picture");  //Canvas
     var ctx = c.getContext("2d");
     c.style.display="none";
@@ -169,6 +146,58 @@ var dataURL;
         }
     }
 
+    function add_wine(){    //Sends all form information to php file to save
+      //add form fill checks before calling php page
+        brand = document.getElementById('new_brand').value;
+        if(brand == ""){
+          brand = document.getElementById("brand").value;
+        }
+        subtype = document.getElementById('new_subtype').value;
+        if(subtype == ""){
+          subtype = document.getElementById("subtype").value;
+        }
+        if(validate()){
+          span = document.createElement('span');
+          span.innerHTML = "Saving";
+          document.getElementById('message').appendChild(span);
+          window.scrollTo(0, 0);
+          ajaxurl = 'add_wine.php',
+          data =  {
+            'name': document.getElementById("name").value,
+            'brand': brand,
+            'picture': dataURL,
+            'strength': document.getElementById("strength").value,
+            'volume': document.getElementById("volume").value,
+            'type': document.getElementById("type").value,
+            'subtype': subtype,
+            'price': document.getElementById("price").value
+          };
+          $.post(ajaxurl, data, function (response) {
+              console.log(response);
+              console.log("done");
+              span.innerHTML = "Wine Saved";
+          });
+        }
+    }
+
+    function validate(){
+      err = document.getElementById("err");
+      if(err != null){
+        err.remove();
+      }
+      if(!document.getElementById("name").value == ""){
+        if(!dataURL == ""){
+          if(!document.getElementById("price").value == ""){            
+            return true;
+          }
+        }
+      }      
+      error_message = document.createElement('span');
+      error_message.innerHTML = "Please fill out remaining fields";
+      error_message.setAttribute('id', 'err');
+      document.getElementById('error_message').appendChild(error_message);
+      return false;
+    }
 </script>
 
 </body>
