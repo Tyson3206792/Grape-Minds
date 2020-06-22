@@ -89,6 +89,13 @@ h1{
 	text-shadow: 3px 2px 0px #fff, 6px 5px 0px rgba(0,0,0,0.15);
 }
 
+hr{
+	
+	border: 1px solid black;
+	border-radius: 1px;
+	margin: 15px;
+  }
+
 /*Menu stuff*/
 
 .nav.navbar-nav a {
