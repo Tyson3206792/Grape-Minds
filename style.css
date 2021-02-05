@@ -38,9 +38,9 @@ span{
 }
 
 label {
-	font-family: 'Enriqueta', arial, serif; 
-	line-height: 1.25; 
-	margin: 0 0 10px; 
+	font-family: 'Enriqueta', arial, serif;
+	line-height: 1.25;
+	margin: 0 0 10px;
   width: 26%;
 	height: auto;
 }
@@ -90,7 +90,7 @@ h1{
 }
 
 hr{
-	
+
 	border: 1px solid black;
 	border-radius: 1px;
 	margin: 15px;
@@ -98,7 +98,13 @@ hr{
 
 /*Menu stuff*/
 
-.nav.navbar-nav a {
+.navbar-expand-md .navbar-nav .nav-link .nav.navbar-nav a {
   color: #fff;
+  display: none;
 }
 
+@media (max-width: 768px){
+    .navbar-expand-md .navbar-nav .nav-link {
+        display: block;
+    }
+}

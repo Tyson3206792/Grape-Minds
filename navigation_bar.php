@@ -3,16 +3,16 @@
 <!-- Navbar (sit on top) -->
 
 <nav class="nav navbar-dark navbar navbar-expand-md sticky-top" style="background:#000">
-    
+
     <a class="navbar-brand" href="index.php"><img src='favicon.jpg' class ='img-responsive'> Home</a>
-      
+
     <!-- Collapse button -->
-    
+
     <button class="navbar-toggler align-top" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
     <span style="position: inherit" class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-  <ul class="navbar-nav">  
+  <ul class="navbar-nav">
   <li class="nav-item active">
         <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
       </li>
@@ -21,7 +21,7 @@
       </li>
     </ul>
   </div>
-  
+
 </nav>
 
 <div class="jumbotron text-center">

@@ -11,7 +11,7 @@
   <title>Grape Minds</title>
 </head>
 
-<?php 
+<?php
   require_once 'db_connect.php';
   include 'class-wine.php';
   include 'navigation_bar.php';
@@ -49,7 +49,7 @@ if(isset($_POST['wine_id']) || isset($_GET['wine_id'])){//display information fo
     echo "</div>";
     echo "<div class='col-md-2'></div></div>";
     echo "<div class='row'><div class='col-md-12'><hr></div></div>";
-  
+
 }
 
 ?><div class="container">
@@ -83,8 +83,8 @@ if ($results = $mysqli-> query($query)) {
           <?php
         echo "</div>";
       echo "</div>";
-    }  
+    }
   }
-} 
+}
 
 echo "</div>";//closing container tag

@@ -9,14 +9,14 @@ class Wine{
 
 	function __construct($wine_id){
         $this->wine_id = $wine_id;
-        /* 
+        /*
         *
         * Get wine information from database and assign to correct variables
         *
         */
         require_once 'db_connect.php';//require_once instead of include so it will only add if not already included
-        $mysqli = establish_connection();       
-        $query = "SELECT * FROM wines WHERE wine_id = '$wine_id'";
+        $mysqli = establish_connection();
+        $query = "SELECT * FROM wines LEFT JOIN rating ON wines.wine_id = rating.wine_id WHERE wines.wine_id = '$wine_id'";
         /**
          * Currently having issues with getting the ratings information. LEFT JOIN stops the query working
          * (e.g. adding "LEFT JOIN rating ON wines.wine_id = rating.wine_id"),
@@ -34,16 +34,9 @@ class Wine{
                     'type' => $row[6],
                     'subtype' => $row[7],
                     'price' => $row[8],
+										'comments' => $row[11],
+										'rating' => $row[13],
                 );
-                /*if(isset($row[7])){//if ratings found
-                    $this->ratings[] = array(
-                        'rating_id' => $row[7],
-                        'wine_id' => $row[8],
-                        'ranker' => $row[9],
-                        'comments' => $row[10],
-                        'rating' => $row[11],
-                    );
-                }*/
             }
         }
         $query = "SELECT * FROM rating WHERE wine_id = '$wine_id'";
@@ -62,7 +55,12 @@ class Wine{
     }
 
     function get_wine_info(){
-        return $this->wine_info;
+				$arr = $this->wine_info;
+				if(is_null($arr['rating']))
+        		return array_slice($this->wine_info, 0, 9);
+				else {
+						return $arr;
+				}
     }
 
     function image(){//returns default img if none stored in database
@@ -75,7 +73,7 @@ class Wine{
         $ratings = (isset($this->ratings)) ? $this->ratings : array();
         return $ratings;
     }
-    
+
     function ratings_count(){
         return count($this->get_ratings());
     }

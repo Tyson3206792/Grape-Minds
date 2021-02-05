@@ -1,0 +1,1 @@
+git reset --hard | discard local changes to allow to pull from remote repo
