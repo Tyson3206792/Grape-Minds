@@ -1,1 +1,20 @@
 git reset --hard | discard local changes to allow to pull from remote repo
+
+current stored proc for search Wines
+
+============
+DELIMITER //
+DROP PROCEDURE IF EXISTS SearchWines//
+
+CREATE PROCEDURE SearchWines(IN keyword varchar(1000), IN pbrand varchar(1000), IN pstrength varchar(1000), IN pvolume int(11), IN ptype varchar(1000), IN psubtype tinytext, IN pprice decimal(5, 2))
+BEGIN
+SELECT wine_id FROM wines
+WHERE (keyword IS NULL OR name LIKE Keyword)
+AND (pbrand IS NULL OR brand = pbrand)
+AND (pstrength IS NULL OR strength = pstrength)
+AND (pvolume IS NULL OR volume = pvolume)
+AND (ptype IS NULL OR ptype = type)
+AND (psubtype IS NULL OR psubtype = subtype)
+AND (pprice IS NULL OR pprice = price);
+END//
+============
